@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+
+    <link rel="stylesheet" href="index.css">
+    <script src="jquery.js"></script>
+</head>
+
+<body>
+    <main>
+
+        <div class="calc">
+            <div class="display">
+                <h2 class="screen"></h2>
+            </div>
+
+            <div class="buttons">
+
+                <button value="7" class="button">7</button>
+                <button value="8" class="button">8</button>
+                <button value="9" class="button">9</button>
+
+                <button value="+" class="button">+</button>
+
+                <button value="4" class="button">4</button>
+                <button value="5" class="button">5</button>
+                <button value="6" class="button">6</button>
+
+                <button value="-" class="button">-</button>
+
+                <button value="1" class="button">1</button>
+                <button value="2" class="button">2</button>
+                <button value="3" class="button">3</button>
+
+                <button value="x" class="button">X</button>
+
+                <button value="0" class="button">0</button>
+                <button value="<" class="button bS">&larr;</button>
+                <button value="÷" class="button">÷</button>
+                <button value="=" class="button">=</button>
+
+            </div>
+        </div>
+
+    </main>
+</body>
+
+<script>
+
+    $(() =>
+    {
+        const buttons = $('button')
+        const screen = $('.screen')
+        let nums = ''
+
+        /*FUNÇÃO PARA MUDAR TEXTO DE H2 COM O VALOR DO BOTÃO PRESSIONADO*/
+
+        function controller(btnVal)
+        {
+            let thisButtonValue = btnVal
+            let lastChar = screen.text().slice(-1) /*ÚLTIMO CARACTER*/
+            const isNumber = lastChar >= 0 && lastChar <= 9 && screen.text() != '' /*CONST FEITA PARA VERIFICAR SE PODE INSERIR UM CARACTER ESPECIAL*/
+
+            /*IMPRIMIR BOTÕES COM VALORES*/
+            if (thisButtonValue >= 0 && thisButtonValue <= 9)
+            {
+                nums += thisButtonValue
+            }
+
+            /*IMPRIMIR + E -*/
+            else if (thisButtonValue == '+' || thisButtonValue == '-')
+            {
+                if (isNumber)
+                {
+                    nums += thisButtonValue
+                }
+            }
+
+            /*IMPRIMIR x E ÷*/
+            else if (thisButtonValue == 'x' || thisButtonValue == '÷')
+            {
+                if (isNumber)
+                {
+                    nums += thisButtonValue
+                }
+            }
+
+            /*BACKSPACE*/
+            if (thisButtonValue == '<' || screen.text().length >= 23)
+            {
+                nums = nums.slice(0, -1)
+                console.log('backspace');
+            }
+
+            /*RESULTADO*/
+            if (thisButtonValue == '=')
+            {
+                let res = nums
+
+                res = res.replace('x', '*')
+                res = res.replace('÷', '/')
+
+                if (lastChar == '+' || lastChar == '-' || lastChar == 'x' || lastChar == '÷')
+                {
+                    res = res.slice(0, -1)
+                }
+
+                res = eval(res)
+                nums = res
+            }
+
+            screen.text(nums)
+            nums = screen.text()
+
+        }
+
+        $('button').mousedown(function ()
+        {
+            let btnVal = $(this).val()
+            controller(btnVal);
+        });
+
+        /*INSERIR NUMEROS PELAS TECLAS*/
+        $("body").keydown(function (e)
+        {
+            let keyPressed = e.which
+
+            switch (keyPressed)
+            {
+                case 8: controller('<')
+                    break;
+                case 13: controller('=')
+                    break;
+                case 96: controller(0)
+                    break;
+                case 97: controller(1)
+                    break;
+                case 98: controller(2)
+                    break;
+                case 99: controller(3)
+                    break;
+                case 100: controller(4)
+                    break;
+                case 101: controller(5)
+                    break;
+                case 102: controller(6)
+                    break;
+                case 103: controller(7)
+                    break;
+                case 104: controller(8)
+                    break;
+                case 105: controller(9)
+                    break;
+                case 107: controller('+')
+                    break;
+                case 109: controller('-')
+                    break;
+                case 106: controller('x')
+                    break;
+                case 111: controller('÷')
+                    break;
+            }
+        });
+    })
+
+</script>
+
+</html>
